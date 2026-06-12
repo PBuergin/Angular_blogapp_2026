@@ -35,4 +35,4 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: upload
           skip_app_build: true
-          app_location: "dist/Angular_blogapp_2026/browser"
+          app_location: "dist/app/browser"
