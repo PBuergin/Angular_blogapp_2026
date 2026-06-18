@@ -17,4 +17,16 @@
       <img [src]="model().headerImageUrl" [alt]="model().title" />
     </mat-card-content>
   }
+
+  <mat-card-actions>
+    <button mat-icon-button (click)="onLike()">
+      @if (model().likedByMe) {
+        <mat-icon>favorite</mat-icon>
+      } @else {
+        <mat-icon>favorite_border</mat-icon>
+      }
+    </button>
+
+    <span>{{ model().likes }}</span>
+  </mat-card-actions>
 </mat-card>

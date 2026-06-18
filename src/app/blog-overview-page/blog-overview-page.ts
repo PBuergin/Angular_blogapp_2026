@@ -11,5 +11,21 @@ import blogData from '../data/blogs.json';
   styleUrl: './blog-overview-page.scss',
 })
 export class BlogOverviewPageComponent {
-  readonly blogs: Blog[] = blogData as Blog[];
+  blogs: Blog[] = blogData as Blog[];
+
+  toggleLike(id: number): void {
+    const blog = this.blogs.find((b) => b.id === id);
+
+    if (!blog) {
+      return;
+    }
+
+    if (blog.likedByMe) {
+      blog.likedByMe = false;
+      blog.likes--;
+    } else {
+      blog.likedByMe = true;
+      blog.likes++;
+    }
+  }
 }
