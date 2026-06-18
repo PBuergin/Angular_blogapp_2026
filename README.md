@@ -1,3 +1,7 @@
+# Aufgabenblatt: Erste Blog-Komponenten
+
+2026-06-18 erledigt
+
 # 2026-06-12 Azure Eingerichtet
 
 # BlogappTemplate
