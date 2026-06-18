@@ -1,0 +1,20 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      {{ model().title }}
+    </mat-card-title>
+    <mat-card-subtitle>
+      {{ model().author }}
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    {{ model().contentPreview }}
+  </mat-card-content>
+
+  @if (model().headerImageUrl) {
+    <mat-card-content>
+      <img [src]="model().headerImageUrl" [alt]="model().title" />
+    </mat-card-content>
+  }
+</mat-card>
