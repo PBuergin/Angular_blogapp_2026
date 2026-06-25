@@ -1,19 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
-import { BlogOverviewPageComponent } from './blog-overview-page';
+import { BlogDetailPageComponent } from './blog-detail-page';
 
-describe('BlogOverviewPageComponent', () => {
-  let component: BlogOverviewPageComponent;
-  let fixture: ComponentFixture<BlogOverviewPageComponent>;
+describe('BlogDetailPageComponent', () => {
+  let component: BlogDetailPageComponent;
+  let fixture: ComponentFixture<BlogDetailPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BlogOverviewPageComponent],
+      imports: [BlogDetailPageComponent],
       providers: [provideRouter([])],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(BlogOverviewPageComponent);
+    fixture = TestBed.createComponent(BlogDetailPageComponent);
+    fixture.componentRef.setInput('id', '1');
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

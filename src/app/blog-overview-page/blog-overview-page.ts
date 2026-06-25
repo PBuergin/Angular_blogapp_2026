@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { BlogCardComponent } from '../blog-card/blog-card';
 import { Blog } from '../../models/blog';
-import blogData from '../data/blogs.json';
+import { BlogService } from '../shared/blog.service';
 
 @Component({
   selector: 'app-blog-overview-page',
@@ -11,7 +11,9 @@ import blogData from '../data/blogs.json';
   styleUrl: './blog-overview-page.scss',
 })
 export class BlogOverviewPageComponent {
-  blogs: Blog[] = blogData as Blog[];
+  private blogService = inject(BlogService);
+
+  blogs: Blog[] = this.blogService.getAll();
 
   toggleLike(id: number): void {
     const blog = this.blogs.find((b) => b.id === id);

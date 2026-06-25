@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { BlogOverviewPageComponent } from './blog-overview-page/blog-overview-page';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [BlogOverviewPageComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

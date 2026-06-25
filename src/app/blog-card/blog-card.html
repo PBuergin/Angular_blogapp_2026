@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title>
+    <mat-card-title [routerLink]="['/blog', model().id]">
       {{ model().title }}
     </mat-card-title>
     <mat-card-subtitle>

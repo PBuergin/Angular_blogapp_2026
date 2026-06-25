@@ -1,0 +1,21 @@
+<a mat-button routerLink="/">← Zurück zur Übersicht</a>
+
+@if (blog(); as blog) {
+  <article class="blog-detail">
+    @if (blog.headerImageUrl) {
+      <img class="header-image" [src]="blog.headerImageUrl" [alt]="blog.title" />
+    }
+
+    <h1>{{ blog.title }}</h1>
+
+    <p class="author">Von {{ blog.author }}</p>
+
+    <p class="content">
+      {{ blog.contentPreview }}
+    </p>
+
+    <p class="meta">❤️ {{ blog.likes }} Likes · 💬 {{ blog.comments }} Kommentare</p>
+  </article>
+} @else {
+  <p>Blog nicht gefunden.</p>
+}

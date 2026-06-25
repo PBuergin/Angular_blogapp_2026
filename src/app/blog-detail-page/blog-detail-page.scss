@@ -1,0 +1,33 @@
+:host {
+  display: block;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.blog-detail {
+  margin-top: 1rem;
+}
+
+.header-image {
+  width: 100%;
+  max-height: 360px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.author {
+  color: gray;
+  margin-bottom: 1.5rem;
+}
+
+.content {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.meta {
+  margin-top: 2rem;
+  color: gray;
+}
