@@ -12,6 +12,7 @@ describe('BlogCard', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(BlogCardComponent);
+
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
