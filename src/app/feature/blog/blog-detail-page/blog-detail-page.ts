@@ -2,7 +2,7 @@ import { Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 
-import { BlogService } from '../shared/blog.service';
+import { BlogService } from '../blog.service';
 
 @Component({
   selector: 'app-blog-detail-page',

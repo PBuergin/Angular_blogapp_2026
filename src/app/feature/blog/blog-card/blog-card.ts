@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { Blog } from '../../models/blog';
+import { Blog } from '../../../../models/blog';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';

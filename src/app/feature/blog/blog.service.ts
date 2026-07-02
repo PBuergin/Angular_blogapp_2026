@@ -1,6 +1,6 @@
 import { Service } from '@angular/core';
-import { Blog } from '../../models/blog';
-import blogData from '../data/blogs.json';
+import { Blog } from '../../../models/blog';
+import blogData from '../../data/blogs.json';
 
 @Service()
 export class BlogService {

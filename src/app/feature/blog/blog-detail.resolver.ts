@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
 
-import { Blog } from '../../models/blog';
+import { Blog } from '../../../models/blog';
 import { BlogService } from './blog.service';
 
 export const blogDetailResolver: ResolveFn<Blog | undefined> = (route) => {

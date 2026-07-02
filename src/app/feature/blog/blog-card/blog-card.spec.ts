@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
 import { BlogCardComponent } from './blog-card';
-import { Blog } from '../../models/blog';
+import { Blog } from '../../../../models/blog';
 
 describe('BlogCardComponent', () => {
   let component: BlogCardComponent;
