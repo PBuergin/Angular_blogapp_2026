@@ -1,24 +1,134 @@
+/* Spacing */
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+/* Colors light */
+$colorL-card: #fcdea8;
+$colorL-title: #7a001b;
+$colorL_subTitle: #005c00;
+$colorL_content: #000000;
+$colorL_icon: #30006e;
+$colorL_liked: #0059ff;
+$colorL_boxShadow: rgba(0, 0, 0, 0.3);
+$colorL_boxShadowHover: rgba(0, 0, 0, 0.6);
+
+/* Colors dark */
+$colorD-card: #071d3b;
+$colorD-title: #ffa500;
+$colorD_subTitle: #3be03b;
+$colorD_content: #ffa500;
+$colorD_icon: #7e0101;
+$colorD_liked: #ff0000;
+$colorD_boxShadow: rgba(54, 54, 54, 0.2);
+$colorD_boxShadowHover: rgba(151, 151, 151, 0.6);
+
+/* Mixins */
+@mixin card-layout {
+  border-radius: 12px;
+  margin-bottom: $spacing-lg;
+  padding: $spacing-md;
+  gap: $spacing-sm;
+}
+
+/* Light Mode */
 mat-card {
-  margin-bottom: 1rem;
+  @include card-layout;
+
+  background-color: $colorL-card;
+  color: $colorL_content;
+
+  box-shadow: 0 4px 10px $colorL_boxShadow;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 22px $colorL_boxShadowHover;
+    cursor: pointer;
+  }
+
+  mat-card-title {
+    color: $colorL-title;
+    font-size: 1.6rem;
+    margin-bottom: $spacing-sm;
+  }
+
+  mat-card-subtitle {
+    color: $colorL_subTitle;
+    font-size: 0.9rem;
+  }
+
+  mat-card-content {
+    color: $colorL_content;
+  }
+
+  mat-card-actions {
+    mat-icon {
+      color: $colorL_icon;
+
+      &.liked {
+        color: $colorL_liked;
+      }
+    }
+
+    .likes-count {
+      color: $colorL_icon;
+
+      &.liked {
+        color: $colorL_liked;
+      }
+    }
+  }
+
+  img {
+    border-radius: 8px;
+  }
 }
 
-img {
-  width: 100%;
-  max-height: 300px;
-  object-fit: cover;
-}
+/* Dark Mode */
+:host-context(.dark-theme) {
+  mat-card {
+    background-color: $colorD-card;
+    color: $colorD_content;
 
-mat-card-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
+    box-shadow: 0 6px 18px $colorD_boxShadow;
 
-mat-card-title {
-  font-size: 1.4rem;
-  font-weight: bold;
-}
+    &:hover {
+      box-shadow: 0 12px 26px $colorD_boxShadowHover;
+    }
 
-mat-card-subtitle {
-  color: gray;
+    mat-card-title {
+      color: $colorD-title;
+    }
+
+    mat-card-subtitle {
+      color: $colorD_subTitle;
+    }
+
+    mat-card-content {
+      color: $colorD_content;
+    }
+
+    mat-card-actions {
+      mat-icon {
+        color: $colorD_icon;
+
+        &.liked {
+          color: $colorD_liked;
+        }
+      }
+
+      .likes-count {
+        color: $colorD_icon;
+
+        &.liked {
+          color: $colorD_liked;
+        }
+      }
+    }
+  }
 }
