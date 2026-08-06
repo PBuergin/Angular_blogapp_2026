@@ -7,23 +7,23 @@ $spacing-xl: 32px;
 
 /* Colors light */
 $colorL-card: #fcdea8;
-$colorL-title: #7a001b;
-$colorL_subTitle: #005c00;
-$colorL_content: #000000;
-$colorL_icon: #30006e;
-$colorL_liked: #0059ff;
-$colorL_boxShadow: rgba(0, 0, 0, 0.3);
-$colorL_boxShadowHover: rgba(0, 0, 0, 0.6);
+$colorL-title: #31035c;
+$colorL-subTitle: #005c00;
+$colorL-content: #000000;
+$colorL-icon: #30006e;
+$colorL-liked: #0059ff;
+$colorL-boxShadow: rgba(0, 0, 0, 0.3);
+$colorL-boxShadowHover: rgba(0, 0, 0, 0.6);
 
 /* Colors dark */
 $colorD-card: #071d3b;
 $colorD-title: #ffa500;
-$colorD_subTitle: #3be03b;
-$colorD_content: #ffa500;
-$colorD_icon: #7e0101;
-$colorD_liked: #ff0000;
-$colorD_boxShadow: rgba(54, 54, 54, 0.2);
-$colorD_boxShadowHover: rgba(151, 151, 151, 0.6);
+$colorD-subTitle: #3be03b;
+$colorD-content: #ffa500;
+$colorD-icon: #7e0101;
+$colorD-liked: #ff0000;
+$colorD-boxShadow: rgba(54, 54, 54, 0.2);
+$colorD-boxShadowHover: rgba(151, 151, 151, 0.6);
 
 /* Mixins */
 @mixin card-layout {
@@ -33,21 +33,30 @@ $colorD_boxShadowHover: rgba(151, 151, 151, 0.6);
   gap: $spacing-sm;
 }
 
-/* Light Mode */
+/* =======================================================
+   Light Mode
+======================================================= */
+
 mat-card {
   @include card-layout;
 
   background-color: $colorL-card;
-  color: $colorL_content;
+  color: $colorL-content;
 
-  box-shadow: 0 4px 10px $colorL_boxShadow;
+  min-height: 620px;
+
+  display: flex;
+  flex-direction: column;
+
+  box-shadow: 0 4px 10px $colorL-boxShadow;
+
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 22px $colorL_boxShadowHover;
+    box-shadow: 0 10px 22px $colorL-boxShadowHover;
     cursor: pointer;
   }
 
@@ -58,47 +67,65 @@ mat-card {
   }
 
   mat-card-subtitle {
-    color: $colorL_subTitle;
+    color: $colorL-subTitle;
     font-size: 0.9rem;
   }
 
   mat-card-content {
-    color: $colorL_content;
+    color: $colorL-content;
+
+    flex: 1;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+  }
+
+  img {
+    width: 100%;
+    height: 220px;
+
+    object-fit: cover;
+
+    border-radius: 8px;
   }
 
   mat-card-actions {
+    margin-top: auto;
+
     mat-icon {
-      color: $colorL_icon;
+      color: $colorL-icon;
 
       &.liked {
-        color: $colorL_liked;
+        color: $colorL-liked;
       }
     }
 
     .likes-count {
-      color: $colorL_icon;
+      color: $colorL-icon;
 
       &.liked {
-        color: $colorL_liked;
+        color: $colorL-liked;
       }
     }
   }
-
-  img {
-    border-radius: 8px;
-  }
 }
 
-/* Dark Mode */
+/* =======================================================
+   Dark Mode
+======================================================= */
+
 :host-context(.dark-theme) {
   mat-card {
     background-color: $colorD-card;
-    color: $colorD_content;
+    color: $colorD-content;
 
-    box-shadow: 0 6px 18px $colorD_boxShadow;
+    box-shadow: 0 6px 18px $colorD-boxShadow;
 
     &:hover {
-      box-shadow: 0 12px 26px $colorD_boxShadowHover;
+      box-shadow: 0 12px 26px $colorD-boxShadowHover;
     }
 
     mat-card-title {
@@ -106,27 +133,29 @@ mat-card {
     }
 
     mat-card-subtitle {
-      color: $colorD_subTitle;
+      color: $colorD-subTitle;
     }
 
     mat-card-content {
-      color: $colorD_content;
+      color: $colorD-content;
     }
 
     mat-card-actions {
+      margin-top: auto;
+
       mat-icon {
-        color: $colorD_icon;
+        color: $colorD-icon;
 
         &.liked {
-          color: $colorD_liked;
+          color: $colorD-liked;
         }
       }
 
       .likes-count {
-        color: $colorD_icon;
+        color: $colorD-icon;
 
         &.liked {
-          color: $colorD_liked;
+          color: $colorD-liked;
         }
       }
     }

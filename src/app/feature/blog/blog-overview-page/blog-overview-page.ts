@@ -18,10 +18,20 @@ export class BlogOverviewPageComponent implements OnInit {
   private blogService = inject(BlogService);
 
   readonly blogs = signal<Blog[]>([]);
+  readonly loading = signal(false);
 
   async ngOnInit(): Promise<void> {
-    const blogs = await this.blogService.getBlogs();
-    this.blogs.set(blogs);
+    this.loading.set(true);
+
+    try {
+      // künstliche Verzögerung für Aufgabe 3: loading state
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      const blogs = await this.blogService.getBlogs();
+      this.blogs.set(blogs);
+    } finally {
+      this.loading.set(false);
+    }
   }
 
   constructor() {
