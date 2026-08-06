@@ -11,7 +11,7 @@
 <h1>Blog Übersicht</h1>
 
 <div class="blog-list">
-  @for (blog of blogs; track blog.id) {
+  @for (blog of blogs(); track blog.id) {
     <app-blog-card [model]="blog" (liked)="toggleLike($event)"> </app-blog-card>
   } @empty {
     <p>Keine Blog-Posts vorhanden.</p>

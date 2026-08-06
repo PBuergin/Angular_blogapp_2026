@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { BlogCardComponent } from '../blog-card/blog-card';
 import { Blog } from '../../../../models/blog';
 import { BlogService } from '../blog.service';
@@ -12,12 +12,17 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './blog-overview-page.html',
   styleUrl: './blog-overview-page.scss',
 })
-export class BlogOverviewPageComponent {
+export class BlogOverviewPageComponent implements OnInit {
   isDarkMode = false;
 
   private blogService = inject(BlogService);
 
-  blogs: Blog[] = this.blogService.getAll();
+  readonly blogs = signal<Blog[]>([]);
+
+  async ngOnInit(): Promise<void> {
+    const blogs = await this.blogService.getBlogs();
+    this.blogs.set(blogs);
+  }
 
   constructor() {
     const savedTheme = localStorage.getItem('theme');
@@ -35,7 +40,7 @@ export class BlogOverviewPageComponent {
   }
 
   toggleLike(id: number): void {
-    const blog = this.blogs.find((b) => b.id === id);
+    const blog = this.blogs().find((b) => b.id === id);
 
     if (!blog) {
       return;
@@ -48,6 +53,8 @@ export class BlogOverviewPageComponent {
       blog.likedByMe = true;
       blog.likes++;
     }
+
+    this.blogs.update((blogs) => [...blogs]);
   }
 
   toggleTheme(): void {
