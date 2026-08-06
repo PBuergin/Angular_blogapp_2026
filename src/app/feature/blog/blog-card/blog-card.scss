@@ -1,24 +1,163 @@
+/* Spacing */
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+/* Colors light */
+$colorL-card: #fcdea8;
+$colorL-title: #31035c;
+$colorL-subTitle: #005c00;
+$colorL-content: #000000;
+$colorL-icon: #30006e;
+$colorL-liked: #0059ff;
+$colorL-boxShadow: rgba(0, 0, 0, 0.3);
+$colorL-boxShadowHover: rgba(0, 0, 0, 0.6);
+
+/* Colors dark */
+$colorD-card: #071d3b;
+$colorD-title: #ffa500;
+$colorD-subTitle: #3be03b;
+$colorD-content: #ffa500;
+$colorD-icon: #7e0101;
+$colorD-liked: #ff0000;
+$colorD-boxShadow: rgba(54, 54, 54, 0.2);
+$colorD-boxShadowHover: rgba(151, 151, 151, 0.6);
+
+/* Mixins */
+@mixin card-layout {
+  border-radius: 12px;
+  margin-bottom: $spacing-lg;
+  padding: $spacing-md;
+  gap: $spacing-sm;
+}
+
+/* =======================================================
+   Light Mode
+======================================================= */
+
 mat-card {
-  margin-bottom: 1rem;
-}
+  @include card-layout;
 
-img {
-  width: 100%;
-  max-height: 300px;
-  object-fit: cover;
-}
+  background-color: $colorL-card;
+  color: $colorL-content;
 
-mat-card-actions {
+  min-height: 620px;
+
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  flex-direction: column;
+
+  box-shadow: 0 4px 10px $colorL-boxShadow;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 22px $colorL-boxShadowHover;
+    cursor: pointer;
+  }
+
+  mat-card-title {
+    color: $colorL-title;
+    font-size: 1.6rem;
+    margin-bottom: $spacing-sm;
+  }
+
+  mat-card-subtitle {
+    color: $colorL-subTitle;
+    font-size: 0.9rem;
+  }
+
+  mat-card-content {
+    color: $colorL-content;
+
+    flex: 1;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+  }
+
+  img {
+    width: 100%;
+    height: 220px;
+
+    object-fit: cover;
+
+    border-radius: 8px;
+  }
+
+  mat-card-actions {
+    margin-top: auto;
+
+    mat-icon {
+      color: $colorL-icon;
+
+      &.liked {
+        color: $colorL-liked;
+      }
+    }
+
+    .likes-count {
+      color: $colorL-icon;
+
+      &.liked {
+        color: $colorL-liked;
+      }
+    }
+  }
 }
 
-mat-card-title {
-  font-size: 1.4rem;
-  font-weight: bold;
-}
+/* =======================================================
+   Dark Mode
+======================================================= */
 
-mat-card-subtitle {
-  color: gray;
+:host-context(.dark-theme) {
+  mat-card {
+    background-color: $colorD-card;
+    color: $colorD-content;
+
+    box-shadow: 0 6px 18px $colorD-boxShadow;
+
+    &:hover {
+      box-shadow: 0 12px 26px $colorD-boxShadowHover;
+    }
+
+    mat-card-title {
+      color: $colorD-title;
+    }
+
+    mat-card-subtitle {
+      color: $colorD-subTitle;
+    }
+
+    mat-card-content {
+      color: $colorD-content;
+    }
+
+    mat-card-actions {
+      margin-top: auto;
+
+      mat-icon {
+        color: $colorD-icon;
+
+        &.liked {
+          color: $colorD-liked;
+        }
+      }
+
+      .likes-count {
+        color: $colorD-icon;
+
+        &.liked {
+          color: $colorD-liked;
+        }
+      }
+    }
+  }
 }

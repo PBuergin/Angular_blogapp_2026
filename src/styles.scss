@@ -1,27 +1,47 @@
 @use '@angular/material' as mat;
 
-// ── Light theme (azure primary) ──
-$light-theme: mat.define-theme(
-  (
-    color: (
-      theme-type: light,
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-  )
-);
-
-// ── Apply light theme as default on <html> ──
 html {
-  @include mat.all-component-themes($light-theme);
+  @include mat.theme(
+    (
+      color: (
+        theme-type: light,
+        primary: mat.$violet-palette,
+        tertiary: mat.$blue-palette,
+      ),
+    )
+  );
 }
 
-html,
-body {
-  height: 100%;
+html.dark-theme {
+  @include mat.theme(
+    (
+      color: (
+        theme-type: dark,
+        primary: mat.$orange-palette,
+        tertiary: mat.$green-palette,
+      ),
+    )
+  );
 }
+
+/* Globale Styles */
 
 body {
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-family: Roboto, sans-serif;
+
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+}
+
+h1 {
+  color: var(--mat-sys-primary);
+}
+
+a {
+  color: var(--mat-sys-primary);
+}
+
+button {
+  color: var(--mat-sys-primary);
 }

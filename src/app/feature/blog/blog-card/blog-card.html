@@ -21,12 +21,14 @@
   <mat-card-actions>
     <button mat-icon-button (click)="onLike()">
       @if (model().likedByMe) {
-        <mat-icon>favorite</mat-icon>
+        <mat-icon class="liked">favorite</mat-icon>
       } @else {
         <mat-icon>favorite_border</mat-icon>
       }
     </button>
 
-    <span>{{ model().likes }}</span>
+    <span class="likes-count" [class.liked]="model().likedByMe">
+      {{ model().likes }}
+    </span>
   </mat-card-actions>
 </mat-card>
