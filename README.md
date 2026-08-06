@@ -1,3 +1,10 @@
+# Aufgabenblatt Backend API Integration
+
+Aufgabe 1: gelöst
+Aufgabe 2: code gelöst, GUI für post, put, delete nicht verändert, Eingabemaske fehlt.
+Aufgabe 3: gelöst, künstliche Verzögerung zur demo eingebaut.
+Aufgabe 4: gelöst, auskommentierte Fehlerquelle eingebaut.
+
 # Aufgabenblatt: Erste Blog-Komponenten
 
 2026-06-18 erledigt
