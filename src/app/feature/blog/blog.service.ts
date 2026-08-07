@@ -47,7 +47,7 @@ export class BlogService {
       // original für zod test auskommentieren und zod test entkommentieren
       const result = BlogArraySchema.safeParse(response.data);
 
-      /* zod test mit falschen daten  **
+      /* zod test mit falschen daten  ***
       
       // Testdaten erzeugen
       const invalidData = structuredClone(response.data as Blog[]);
