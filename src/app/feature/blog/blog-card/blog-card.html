@@ -1,8 +1,32 @@
+<!-- 
+Das ist die äußere Angular-Material-Komponente für eine Karte.
+Sie kommt aus dem zuvor importierten:  MatCardModule
+Die gesamte Blog-Darstellung befindet sich innerhalb dieser Card.
+-->
 <mat-card>
+  <!-- 
+  Beginn des Kopfbereichs der Karte.
+  Typischerweise enthält dieser Bereich Titel, Untertitel oder Meta-Informationen.
+  -->
   <mat-card-header>
+    <!-- 
+    Hier passiert gleich mehrere Dinge: mat-card-title definiert den Titelbereich der Card.
+    Der Ausdruck   [routerLink]="['/blog', model().id]"   ist Property Binding.
+    Die eckigen Klammern bedeuten: Der Wert rechts davon ist kein normaler String, sondern ein Angular-Ausdruck.
+    Der Router-Link besteht aus zwei Teilen:   ['/blog', model().id]
+    Zum Beispiel:   model().id = 7   ergibt sinngemäß: /blog/7
+    Wenn man auf den Titel klickt, navigiert Angular also zur Detailseite dieses Blogs.
+    model() ist dabei wieder dein Input Signal aus blog-card.ts.
+    -->
     <mat-card-title [routerLink]="['/blog', model().id]">
+      <!--
+      Das ist Interpolation.   {{ ... }}   bedeuten:
+      Werte aus der Komponente sollen als Text im HTML ausgegeben werden.
+      model()   liefert das aktuelle Blog-Objekt.   .title   liest dessen Titel.
+      -->
       {{ model().title }}
     </mat-card-title>
+
     <mat-card-subtitle>
       {{ model().author }}
     </mat-card-subtitle>
@@ -12,22 +36,65 @@
     {{ model().contentPreview }}
   </mat-card-content>
 
+  <!-- 
+  Das ist die moderne Angular-Syntax für eine Bedingung. Sie bedeutet:
+  Führe den folgenden HTML-Block nur aus, wenn headerImageUrl vorhanden bzw. truthy ist.
+  -->
   @if (model().headerImageUrl) {
     <mat-card-content>
+      <!--
+      Hier wird das Bild angezeigt. Auch hier gibt es wieder Property Binding.
+      [src]="model().headerImageUrl"   setzt die Bildquelle dynamisch.
+      Beispiel:   model().headerImageUrl   könnte sein: https://example.com/angular.jpg
+      Angular setzt diesen Wert dann als src des <img>-Elements.
+      Der zweite Teil:   [alt]="model().title"   setzt den alternativen Bildtext.
+      Dieser ist wichtig für Barrierefreiheit und für den Fall, dass das Bild nicht geladen werden kann.
+      -->
       <img [src]="model().headerImageUrl" [alt]="model().title" />
     </mat-card-content>
   }
 
+  <!-- 
+  Beginn des Aktionsbereichs der Card. Dieser Bereich ist für Buttons oder andere Benutzeraktionen gedacht.
+  -->
   <mat-card-actions>
+    <!--
+    Hier wird ein Button erzeugt.
+    mat-icon-button kommt von Angular Material und formatiert den Button als Icon-Button.
+    (click)="onLike()"   Das ist Event Binding. ( ... ) bedeuten:
+    Reagiere auf ein Event des HTML-Elements. Hier ist das Event: click
+    Beim Klick wird die Methode   onLike()   aus blog-card.ts ausgeführt.
+    -->
     <button mat-icon-button (click)="onLike()">
+      <!--
+      Wenn:   model().likedByMe === true   wird der erste Block angezeigt.
+      -->
       @if (model().likedByMe) {
+        <!--
+        Es wird das Material-Icon "favorite" angezeigt. Das ist typischerweise das gefüllte Herz.
+        Zusätzlich bekommt das Icon die CSS-Klasse:   class="liked"
+        Damit kann in blog-card.scss zum Beispiel eine spezielle Farbe definiert werden.
+        -->
         <mat-icon class="liked">favorite</mat-icon>
       } @else {
+        <!--
+        Dann wird das ungefüllte Herz angezeigt.
+        -->
         <mat-icon>favorite_border</mat-icon>
       }
     </button>
 
+    <!--
+    span ist ein normales HTML-Element für einen kleinen Textbereich.
+    Es hat immer die CSS-Klasse:   likes-count
+    Zusätzlich gibt es:   [class.liked]="model().likedByMe"
+    Das ist eine bedingte CSS-Klasse. Wenn:   model().likedByMe === true
+    bekommt das span zusätzlich die Klasse:   liked   Wenn false, nicht.
+    -->
     <span class="likes-count" [class.liked]="model().likedByMe">
+      <!--
+      Gibt die Anzahl Likes aus.
+      -->
       {{ model().likes }}
     </span>
   </mat-card-actions>
