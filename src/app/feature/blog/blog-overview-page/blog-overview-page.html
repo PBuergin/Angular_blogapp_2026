@@ -4,6 +4,19 @@ dient dem Styling über die zugehörige SCSS-Datei.
 -->
 <div class="toolbar">
   <!--
+  Autoren Auswahl
+  -->
+  <select [value]="state.selectedAuthor()" (change)="state.setAuthor($any($event.target).value)">
+    <option value="all">Alle Autoren</option>
+
+    @for (author of state.authors(); track author) {
+      <option [value]="author">
+        {{ author }}
+      </option>
+    }
+  </select>
+
+  <!--
   Hier wird ein Button erzeugt.
   mat-icon-button macht daraus einen Angular-Material-Icon-Button.
   type="button"  legt fest, dass es sich um einen normalen Button handelt.
@@ -52,126 +65,31 @@ Sie zeigt einfach:  Blog Übersicht  an.
 <h1>Blog Übersicht</h1>
 
 <!--
-Hier prüft Angular das Signal:  loading   
-Da loading ein Signal ist:   readonly loading = signal(false);
-muss sein Wert mit:   loading()   gelesen werden.
-Das ist wieder der Unterschied:   normale Property:  isDarkMode   Signal:  loading()
+Anzahl blogs: Aufgabe (08-2-3)
+-->
+<p>Anzahl Blogs: {{ state.blogCount() }}</p>
 
+<!--
 Falls: loading() === true
 -->
-@if (loading()) {
+@if (state.loading()) {
   <!-- 
   wird dieser Text angezeigt 
   -->
   <p>Lade Blogs...</p>
+}
 
-  <!-- 
-  Wenn: loading() === false 
-  -->
-} @else {
-  <!--
-  Hier beginnt der Container für die Blog-Liste. Die CSS-Klasse   blog-list
-  wird vermutlich in blog-overview-page.scss für das Layout verwendet.
-  -->
+@if (state.error()) {
+  <p class="error">
+    {{ state.error() }}
+  </p>
+}
+
+@if (!state.loading()) {
   <div class="blog-list">
-    <!--
-    Das ist eine Angular-Schleife. Sie bedeutet sinngemäß:
-    Gehe durch alle Blog-Objekte im blogs-Signal.
-    Deine TypeScript-Datei enthält:   readonly blogs = signal<Blog[]>([]);
-    Deshalb wird das Array wieder mit:  blogs()  aus dem Signal gelesen.
-    Angenommen:  blogs()  enthält:
-    [
-      { id: 1, title: 'Blog A' },
-      { id: 2, title: 'Blog B' },
-      { id: 3, title: 'Blog C' }
-    ]
-    Dann wird der Block dreimal ausgeführt:
-    1. Durchlauf → blog = Blog A
-    2. Durchlauf → blog = Blog B
-    3. Durchlauf → blog = Blog C
-    Der zweite Teil:  track blog.id  ist für Angular wichtig.
-    Damit sagst du: Identifiziere jeden Listeneintrag anhand seiner id.
-    Angular kann dadurch erkennen, welcher Blog sich verändert, 
-    welcher neu hinzugekommen ist oder welcher entfernt wurde.
-    Beispiel:
-    Blog ID 1
-    Blog ID 2
-    Blog ID 3
-    Wenn sich Blog 2 verändert, kann Angular gezielt diesen Eintrag aktualisieren, 
-    statt die gesamte Liste neu aufzubauen. 
-    Man spricht dabei von Tracking der Listenelemente.
-    -->
-    @for (blog of blogs(); track blog.id) {
-      <!--
-      Diese Zeile verbindet jetzt deine beiden Komponenten miteinander.
-      app-blog-card ist der Selector deiner BlogCardComponent:
-      selector: 'app-blog-card'
-      Für jeden Blog wird also eine eigene BlogCardComponent erzeugt.
-      Wenn drei Blogs vorhanden sind:
-      blogs()
-        │
-        ├── Blog 1 → <app-blog-card>
-        ├── Blog 2 → <app-blog-card>
-        └── Blog 3 → <app-blog-card>
-      Jetzt betrachten wir den Input:  [model]="blog"  Das ist Property Binding.
-      model ist der Input deiner BlogCardComponent:
-      readonly model = input.required<Blog>();
-      Die Overview-Komponente übergibt also das aktuelle blog-Objekt an die jeweilige Card.
-      Der Datenfluss ist:
-
-      BlogOverviewPageComponent
-              │
-              │ blog
-              ▼
-      BlogCardComponent
-              │
-              ▼
-          model()
-
-      Das ist die Parent → Child-Kommunikation.
-      Jetzt der zweite Teil:  (liked)="toggleLike($event)"
-      Das ist Event Binding auf einen Output.
-      Deine BlogCardComponent enthält:   readonly liked = output<number>();
-      und beim Klick:  this.liked.emit(this.model().id);
-      Die Card sendet also eine Blog-ID nach außen.
-      Die Overview Page empfängt diese als:   $event
-      Wenn die Card beispielsweise:  emit(7)  ausführt, entspricht:
-      $event   dem Wert: 7   Dann wird ausgeführt:  toggleLike(7)
-      Der komplette Kommunikationsweg ist also:
-
-      BlogOverviewPage
-            │
-            │ [model]="blog"
-            ▼
-      BlogCard
-            │
-            │ Benutzer klickt Like
-            ▼
-      onLike()
-            │
-            ▼
-      liked.emit(blog.id)
-            │
-            │ (liked)
-            ▼
-      BlogOverviewPage
-            │
-            ▼
-      toggleLike($event)
-
-      Das ist ein sehr typisches Angular-Muster.
-      -->
+    @for (blog of state.filteredBlogs(); track blog.id) {
       <app-blog-card [model]="blog" (liked)="toggleLike($event)"> </app-blog-card>
-
-      <!--
-      @empty gehört zur @for-Schleife. Es bedeutet:
-      Falls die Liste keine Elemente enthält, zeige stattdessen diesen Block.
-      Also wenn:  blogs()  gleich: []  ist.
-      -->
     } @empty {
-      <!--
-      Dann wird diese Meldung angezeigt.
-      -->
       <p>Keine Blog-Posts vorhanden.</p>
     }
   </div>

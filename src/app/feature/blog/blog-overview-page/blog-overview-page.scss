@@ -36,3 +36,18 @@ h1 {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* Author selector */
+select {
+  background-color: white;
+  color: black;
+  border: 1px solid #777;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+
+:host-context(.dark-theme) select {
+  background-color: #071d3b;
+  color: #ffa500;
+  border-color: #888;
+}
