@@ -18,12 +18,12 @@ jobs:
     # Browsers + system deps are prebaked into this image, so there is no
     # `playwright install` step (the part that was hanging). Keep this tag in
     # sync with the @playwright/test version in package.json.
-    container: mcr.microsoft.com/playwright:v1.61.1-noble
+    container: mcr.microsoft.com/playwright:v1.58.2-noble
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
@@ -66,8 +66,6 @@ jobs:
 
       - name: E2E Tests
         run: npm run e2e
-        env:
-          HOME: /root
 
   # Fallow runs in its own job on a plain runner (no container). The action is
   # a composite action that references files via ${{ github.action_path }}; in a
@@ -81,7 +79,7 @@ jobs:
       security-events: write
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         # Full history so Fallow's auto-changed-since can diff against the PR
         # base SHA; a shallow checkout would break that "changed files" scoping.
         with:
