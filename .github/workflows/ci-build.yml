@@ -66,6 +66,8 @@ jobs:
 
       - name: E2E Tests
         run: npm run e2e
+        env:
+          HOME: /root
 
   # Fallow runs in its own job on a plain runner (no container). The action is
   # a composite action that references files via ${{ github.action_path }}; in a

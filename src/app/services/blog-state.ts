@@ -4,7 +4,7 @@ import { Blog } from '../../models/blog';
 import { BlogService } from '../feature/blog/blog.service';
 
 // Aufgabe (08-1-2)
-export interface BlogState {
+interface BlogState {
   blogs: Blog[];
   loading: boolean;
   error: string | null;
