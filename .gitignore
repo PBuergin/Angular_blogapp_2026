@@ -53,3 +53,9 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# BFF local secrets
+/bff/local.settings.json
+/bff/node_modules/
+/bff/dist/
+/bff/.azure/

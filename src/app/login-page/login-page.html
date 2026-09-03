@@ -1,0 +1,7 @@
+<h1>Login</h1>
+
+@if (errorMessage()) {
+  <p>{{ errorMessage() }}</p>
+}
+
+<button type="button" (click)="login()">Login</button>

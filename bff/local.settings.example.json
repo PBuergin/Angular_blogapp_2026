@@ -1,0 +1,16 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "SESSION_SECRET": "change-me-to-a-random-32-char-string!!",
+    "KEYCLOAK_URL": "https://your-keycloak-host/realms/your-realm",
+    "KEYCLOAK_CLIENT_ID": "bff-your-app",
+    "KEYCLOAK_CLIENT_SECRET": "your-client-secret",
+    "BACKEND_API_URL": "https://d-cap-blog-backend---v2.whitepond-b96fee4b.westeurope.azurecontainerapps.io",
+    "ALLOWED_ORIGIN": "http://localhost:4200"
+  },
+  "Host": {
+    "CORS": "*"
+  }
+}

@@ -2,9 +2,9 @@
 
 Complete source code for all Azure Function endpoints. Each function follows the same pattern: handle preflight, check CSRF (state-changing only), do the work, return response with CORS headers and cookies.
 
-## auth-login.ts — POST /api/auth/login
+## auth-login.ts and auth-callback.ts — GET /api/auth/login and GET /api/auth/callback
 
-Accepts `{ username, password }`, authenticates via Keycloak ROPC, seals the session into a cookie, and returns user claims extracted from the JWT access token. Uses `jose.decodeJwt()` (no signature verification needed because the token comes directly from Keycloak over HTTPS).
+The login endpoint accepts a relative `returnUrl`, generates state and PKCE values, seals the OAuth transaction into a short-lived HttpOnly cookie, and redirects to Keycloak. The callback validates state, exchanges the authorization code with `grant_type=authorization_code` and the `code_verifier`, seals the resulting tokens into the existing session cookie, and redirects to the original return URL. The BFF never accepts or handles a username or password.
 
 ```typescript
 import { app, HttpRequest, HttpResponseInit } from '@azure/functions';

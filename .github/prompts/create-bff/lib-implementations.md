@@ -79,13 +79,13 @@ export function isSessionExpired(session: SessionData): boolean {
 
 ## keycloak.ts — OAuth2 integration
 
-Implements three OAuth2 flows against Keycloak's token and revocation endpoints:
+Implements the OAuth2 authorization-code PKCE flow plus refresh and revocation against Keycloak:
 
-- **ROPC (password grant)** for login — the BFF collects credentials via a custom login form, not a Keycloak redirect
+- **Authorization code with PKCE** for login — Keycloak collects credentials and the BFF exchanges the returned code
 - **Refresh token grant** for transparent token renewal
 - **Token revocation** for logout (best-effort, errors swallowed)
 
-The Keycloak client must be configured as a "confidential" client with "Direct Access Grants" (ROPC) enabled. The `offline_access` scope ensures refresh tokens are issued.
+The Keycloak client must be configured as a "confidential" client with `http://localhost:7071/api/auth/callback` allowed as a redirect URI. The `offline_access` scope ensures refresh tokens are issued.
 
 ```typescript
 const KEYCLOAK_URL = process.env.KEYCLOAK_URL!;
@@ -107,14 +107,18 @@ export type TokenResponse = {
   token_type: string;
 };
 
-export async function authenticateUser(username: string, password: string): Promise<TokenResponse> {
+export async function exchangeAuthorizationCode(
+  code: string,
+  codeVerifier: string,
+  redirectUri: string,
+): Promise<TokenResponse> {
   const body = new URLSearchParams({
-    grant_type: 'password',
+    grant_type: 'authorization_code',
     client_id: CLIENT_ID,
     client_secret: CLIENT_SECRET,
-    username,
-    password,
-    scope: 'openid profile email offline_access',
+    code,
+    code_verifier: codeVerifier,
+    redirect_uri: redirectUri,
   });
 
   const res = await fetch(tokenEndpoint(), {

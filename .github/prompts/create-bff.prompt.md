@@ -72,7 +72,7 @@ bff/
       csrf.ts             # X-Requested-With header check
       proxy.ts            # Backend proxy with auto-refresh
     functions/
-      auth-login.ts       # POST /api/auth/login
+      auth-login.ts       # GET /api/auth/login (Authorization Code + PKCE)
       auth-logout.ts      # POST /api/auth/logout
       auth-me.ts          # GET /api/auth/me
       auth-refresh.ts     # POST /api/auth/refresh

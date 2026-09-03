@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "concurrently \"npm run start:app\" \"npm run start:bff\"",
+    "start:app": "ng serve",
+    "start:bff": "cd bff && npm start",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --watch",
@@ -66,6 +68,7 @@
     "@types/node": "^26.0.1",
     "@vitest/coverage-v8": "^4.1.8",
     "angular-eslint": "^21.4.0",
+    "concurrently": "^9.2.0",
     "eslint": "^10.0.3",
     "husky": "^9.1.7",
     "jsdom": "^29.1.1",

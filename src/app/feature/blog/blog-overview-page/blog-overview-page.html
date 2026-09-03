@@ -1,11 +1,5 @@
-<!--
-Hier beginnt ein normales HTML-div. Die Klasse  class="toolbar"
-dient dem Styling über die zugehörige SCSS-Datei.
--->
 <div class="toolbar">
-  <!--
-  Autoren Auswahl
-  -->
+  <!-- Autoren-Auswahl -->
   <select [value]="state.selectedAuthor()" (change)="state.setAuthor($any($event.target).value)">
     <option value="all">Alle Autoren</option>
 
@@ -16,66 +10,32 @@ dient dem Styling über die zugehörige SCSS-Datei.
     }
   </select>
 
-  <!--
-  Hier wird ein Button erzeugt.
-  mat-icon-button macht daraus einen Angular-Material-Icon-Button.
-  type="button"  legt fest, dass es sich um einen normalen Button handelt.
-  Der wichtige Angular-Teil ist:  (click)="toggleTheme()"  Das ist Event Binding.
-  Beim Klick auf den Button wird die Methode  toggleTheme()
-  aus deiner blog-overview-page.ts ausgeführt.
-  Dort wird zwischen Dark Mode und Light Mode umgeschaltet.
-  -->
-  <button mat-icon-button type="button" (click)="toggleTheme()">
-    <!--
-    Hier beginnt eine Angular-Bedingung. Angular prüft die normale Property:
-    isDarkMode   Wichtig: Hier steht nicht   isDarkMode()
-    weil isDarkMode in deiner TypeScript-Datei kein Signal ist, 
-    sondern eine normale boolean-Property:   isDarkMode = false;
-    Wenn isDarkMode === true, wird der folgende Block dargestellt.
-    -->
-    @if (isDarkMode) {
-      <!--
-      Wenn der Dark Mode aktiv ist, wird das Material Icon   light_mode   angezeigt.
-      Das wirkt auf den ersten Blick vielleicht umgekehrt, ist aber logisch:
-      Wenn gerade Dark Mode aktiv ist, zeigt der Button das Symbol für Light Mode, 
-      weil man mit dem Button zum Light Mode wechseln kann.
-      -->
-      <mat-icon>light_mode</mat-icon>
+  <!-- Authentifizierung -->
+  @if (authStore.isAuthenticated()) {
+    <span>
+      {{ authStore.user()?.preferred_username }}
+    </span>
 
-      <!--
-      Falls isDarkMode === false, wird der andere Block angezeigt.
-      -->
+    <button type="button" (click)="logout()">Logout</button>
+  } @else {
+    <button type="button" (click)="goToLogin()">Login</button>
+  }
+
+  <!-- Dark-/Light-Mode -->
+  <button mat-icon-button type="button" (click)="toggleTheme()">
+    @if (isDarkMode) {
+      <mat-icon>light_mode</mat-icon>
     } @else {
-      <!--
-      Wenn aktuell Light Mode aktiv ist, wird das Dark-Mode-Symbol angezeigt.
-      Der Benutzer sieht also, wohin er wechseln kann. Sinngemäß:
-      aktueller Zustand       Button zeigt
-      Dark Mode               ☀ Light Mode
-      Light Mode              ☾ Dark Mode
-      -->
       <mat-icon>dark_mode</mat-icon>
     }
   </button>
 </div>
 
-<!--
-Eine normale HTML-Überschrift der Ebene 1. Hier gibt es keine Angular-Syntax.
-Sie zeigt einfach:  Blog Übersicht  an.
--->
 <h1>Blog Übersicht</h1>
 
-<!--
-Anzahl blogs: Aufgabe (08-2-3)
--->
 <p>Anzahl Blogs: {{ state.blogCount() }}</p>
 
-<!--
-Falls: loading() === true
--->
 @if (state.loading()) {
-  <!-- 
-  wird dieser Text angezeigt 
-  -->
   <p>Lade Blogs...</p>
 }
 
