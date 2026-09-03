@@ -7,7 +7,6 @@ export const authGuard: CanMatchFn = async (_route, segments) => {
   const authStore = inject(AuthStore);
   const router = inject(Router);
 
-  // Warten, bis der initiale Session-Check abgeschlossen ist
   await authStore.ready;
 
   const returnUrl = '/' + segments.map((segment) => segment.path).join('/');
@@ -20,6 +19,7 @@ export const authGuard: CanMatchFn = async (_route, segments) => {
     });
   }
 
+  // Rollenprüfung
   if (!authStore.roles().includes('user')) {
     return router.createUrlTree(['/']);
   }
