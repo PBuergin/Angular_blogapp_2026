@@ -12,7 +12,6 @@ export const authGuard: CanMatchFn = async (_route, segments) => {
 
   const returnUrl = '/' + segments.map((segment) => segment.path).join('/');
 
-  // Nicht eingeloggt
   if (!authStore.isAuthenticated()) {
     return router.createUrlTree(['/login'], {
       queryParams: {
@@ -21,7 +20,6 @@ export const authGuard: CanMatchFn = async (_route, segments) => {
     });
   }
 
-  // Eingeloggt, aber benötigte Rolle fehlt
   if (!authStore.roles().includes('user')) {
     return router.createUrlTree(['/']);
   }
