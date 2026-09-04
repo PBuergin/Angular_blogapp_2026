@@ -1,6 +1,6 @@
 import { HttpRequest, HttpResponseInit } from '@azure/functions';
 
-const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN!;
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN ?? 'http://localhost:4200';
 
 export const corsHeaders: Record<string, string> = {
   'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
@@ -8,7 +8,9 @@ export const corsHeaders: Record<string, string> = {
 };
 
 export function handlePreflight(request: HttpRequest): HttpResponseInit | null {
-  if (request.method !== 'OPTIONS') return null;
+  if (request.method !== 'OPTIONS') {
+    return null;
+  }
 
   return {
     status: 204,

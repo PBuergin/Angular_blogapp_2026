@@ -1,15 +1,20 @@
 import { app, HttpRequest, HttpResponseInit } from '@azure/functions';
-import { parseCookie, unsealSession, clearSessionCookieObj } from '../lib/session.js';
+
+import { clearSessionCookieObj, parseCookie, unsealSession } from '../lib/session.js';
 import { revokeToken } from '../lib/keycloak.js';
 import { checkCsrf } from '../lib/csrf.js';
 import { corsHeaders, handlePreflight } from '../lib/cors.js';
 
 async function authLogout(request: HttpRequest): Promise<HttpResponseInit> {
   const preflight = handlePreflight(request);
-  if (preflight) return preflight;
+  if (preflight) {
+    return preflight;
+  }
 
   const csrfError = checkCsrf(request);
-  if (csrfError) return { ...csrfError, headers: corsHeaders };
+  if (csrfError) {
+    return { ...csrfError, headers: corsHeaders };
+  }
 
   const cookieHeader = request.headers.get('cookie');
   const sealed = parseCookie(cookieHeader);
@@ -17,15 +22,13 @@ async function authLogout(request: HttpRequest): Promise<HttpResponseInit> {
   if (sealed) {
     const session = await unsealSession(sealed);
     if (session) {
-      await revokeToken(session.refreshToken).catch(() => {
-        // best effort
-      });
+      await revokeToken(session.refreshToken).catch(() => undefined);
     }
   }
 
   return {
     status: 200,
-    jsonBody: { isAuthenticated: false },
+    jsonBody: { logoutUrl: '/' },
     headers: corsHeaders,
     cookies: [clearSessionCookieObj()],
   };

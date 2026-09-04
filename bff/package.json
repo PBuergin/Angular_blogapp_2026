@@ -10,7 +10,7 @@
     "prestart": "npm run build"
   },
   "dependencies": {
-    "@azure/functions": "^4.11.2",
+    "@azure/functions": "^4.7.0",
     "@hapi/iron": "^7.0.1",
     "jose": "^6.2.2"
   },

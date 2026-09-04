@@ -45,16 +45,42 @@ export async function unsealOAuthState(cookie: string): Promise<OAuthStateData |
 }
 
 export function parseCookie(cookieHeader: string | null): string | null {
-  if (!cookieHeader) return null;
+  if (!cookieHeader) {
+    return null;
+  }
 
   const match = cookieHeader
     .split(';')
     .map((part) => part.trim())
     .find((part) => part.startsWith(`${COOKIE_NAME}=`));
 
-  if (!match) return null;
+  if (!match) {
+    return null;
+  }
 
   const raw = match.substring(COOKIE_NAME.length + 1);
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
+}
+
+export function parseOAuthStateCookie(cookieHeader: string | null): string | null {
+  if (!cookieHeader) {
+    return null;
+  }
+
+  const match = cookieHeader
+    .split(';')
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(`${OAUTH_STATE_COOKIE_NAME}=`));
+
+  if (!match) {
+    return null;
+  }
+
+  const raw = match.substring(OAUTH_STATE_COOKIE_NAME.length + 1);
   try {
     return decodeURIComponent(raw);
   } catch {
@@ -86,28 +112,6 @@ export function oauthStateCookie(sealed: string): Cookie {
   };
 }
 
-export function clearOAuthStateCookie(): Cookie {
-  return { ...oauthStateCookie(''), maxAge: 0 };
-}
-
-export function parseOAuthStateCookie(cookieHeader: string | null): string | null {
-  if (!cookieHeader) return null;
-
-  const match = cookieHeader
-    .split(';')
-    .map((part) => part.trim())
-    .find((part) => part.startsWith(`${OAUTH_STATE_COOKIE_NAME}=`));
-
-  if (!match) return null;
-
-  const raw = match.substring(OAUTH_STATE_COOKIE_NAME.length + 1);
-  try {
-    return decodeURIComponent(raw);
-  } catch {
-    return raw;
-  }
-}
-
 export function clearSessionCookieObj(): Cookie {
   return {
     name: COOKIE_NAME,
@@ -116,6 +120,13 @@ export function clearSessionCookieObj(): Cookie {
     secure: COOKIE_SECURE,
     sameSite: 'Lax',
     path: '/',
+    maxAge: 0,
+  };
+}
+
+export function clearOAuthStateCookie(): Cookie {
+  return {
+    ...oauthStateCookie(''),
     maxAge: 0,
   };
 }

@@ -1,6 +1,6 @@
 import { app, HttpRequest, HttpResponseInit } from '@azure/functions';
 
-import { exchangeAuthorizationCode } from '../lib/keycloak.js';
+import { corsHeaders, handlePreflight } from '../lib/cors.js';
 import {
   clearOAuthStateCookie,
   parseOAuthStateCookie,
@@ -8,74 +8,76 @@ import {
   sessionCookie,
   unsealOAuthState,
 } from '../lib/session.js';
+import { exchangeAuthorizationCode } from '../lib/keycloak.js';
 
-const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN!;
-const CALLBACK_URL = `${ALLOWED_ORIGIN}/api/auth/callback`;
-
-function redirect(returnUrl: string, error?: string): HttpResponseInit {
-  const target = new URL(returnUrl, ALLOWED_ORIGIN);
-
-  if (error) {
-    target.searchParams.set('error', error);
-  }
-
-  return {
-    status: 302,
-    headers: {
-      Location: `${target.pathname}${target.search}${target.hash}`,
-    },
-    cookies: [clearOAuthStateCookie()],
-  };
-}
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN ?? 'http://localhost:4200';
 
 async function authCallback(request: HttpRequest): Promise<HttpResponseInit> {
-  const stateCookie = parseOAuthStateCookie(request.headers.get('cookie'));
-
-  const transaction = stateCookie ? await unsealOAuthState(stateCookie) : null;
-
-  const state = request.query.get('state');
-
-  if (!transaction || !state || state !== transaction.state) {
-    return {
-      status: 400,
-      jsonBody: {
-        error: 'Invalid OAuth state',
-      },
-    };
-  }
-
-  const providerError = request.query.get('error');
-
-  if (providerError) {
-    return redirect(transaction.returnUrl, providerError);
+  const preflight = handlePreflight(request);
+  if (preflight) {
+    return preflight;
   }
 
   const code = request.query.get('code');
+  const stateParam = request.query.get('state');
+  const cookieHeader = request.headers.get('cookie');
+  const sealedState = parseOAuthStateCookie(cookieHeader);
 
-  if (!code) {
-    return redirect(transaction.returnUrl, 'failed');
+  if (!code || !stateParam || !sealedState) {
+    return {
+      status: 400,
+      jsonBody: { error: 'Missing OAuth callback data' },
+      headers: corsHeaders,
+      cookies: [clearOAuthStateCookie()],
+    };
+  }
+
+  const oauthState = await unsealOAuthState(sealedState);
+
+  if (!oauthState || oauthState.state !== stateParam) {
+    return {
+      status: 400,
+      jsonBody: { error: 'Invalid OAuth state' },
+      headers: corsHeaders,
+      cookies: [clearOAuthStateCookie()],
+    };
   }
 
   try {
-    const tokens = await exchangeAuthorizationCode(code, transaction.codeVerifier, CALLBACK_URL);
+    const tokens = await exchangeAuthorizationCode(
+      code,
+      oauthState.codeVerifier,
+      `${ALLOWED_ORIGIN}/api/auth/callback`,
+    );
 
-    const sealed = await sealSession({
+    const sealedSession = await sealSession({
       accessToken: tokens.access_token,
       refreshToken: tokens.refresh_token,
       expiresAt: Date.now() + tokens.expires_in * 1000,
     });
 
     return {
-      ...redirect(transaction.returnUrl),
-      cookies: [clearOAuthStateCookie(), sessionCookie(sealed)],
+      status: 302,
+      headers: {
+        ...corsHeaders,
+        Location: oauthState.returnUrl || '/',
+      },
+      cookies: [sessionCookie(sealedSession), clearOAuthStateCookie()],
     };
   } catch {
-    return redirect(transaction.returnUrl, 'failed');
+    return {
+      status: 302,
+      headers: {
+        ...corsHeaders,
+        Location: `${ALLOWED_ORIGIN}/login?error=failed`,
+      },
+      cookies: [clearOAuthStateCookie()],
+    };
   }
 }
 
 app.http('auth-callback', {
-  methods: ['GET'],
+  methods: ['GET', 'OPTIONS'],
   authLevel: 'anonymous',
   route: 'auth/callback',
   handler: authCallback,

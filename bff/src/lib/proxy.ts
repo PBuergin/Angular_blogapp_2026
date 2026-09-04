@@ -1,4 +1,5 @@
 import { Cookie, HttpRequest } from '@azure/functions';
+
 import {
   clearSessionCookieObj,
   isSessionExpired,
@@ -10,9 +11,9 @@ import {
 } from './session.js';
 import { refreshTokens } from './keycloak.js';
 
-const BLOG_BACKEND_URL = process.env.BLOG_BACKEND_URL!;
+const BACKEND_API_URL = process.env.BACKEND_API_URL!;
 
-interface ProxyResult {
+export interface ProxyResult {
   status: number;
   body: unknown;
   headers: Record<string, string>;
@@ -81,13 +82,14 @@ export async function proxyToBackend(
 
   const queryString = request.query.toString();
   const url = queryString
-    ? `${BLOG_BACKEND_URL}${path}?${queryString}`
-    : `${BLOG_BACKEND_URL}${path}`;
-  const backendRes = await fetch(url, fetchOptions);
-  const responseBody = await backendRes.json().catch(() => null);
+    ? `${BACKEND_API_URL}${path}?${queryString}`
+    : `${BACKEND_API_URL}${path}`;
+
+  const backendResponse = await fetch(url, fetchOptions);
+  const responseBody = await backendResponse.json().catch(() => null);
 
   return {
-    status: backendRes.status,
+    status: backendResponse.status,
     body: responseBody,
     headers: {},
     cookies: responseCookies,

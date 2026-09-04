@@ -51,3 +51,19 @@ select {
   color: #ffa500;
   border-color: #888;
 }
+/* Login / Logout */
+.auth-button {
+  background-color: white;
+  color: black;
+  border: 1px solid #777;
+  border-radius: 6px;
+  padding: 6px 12px;
+  margin-left: 12px;
+  cursor: pointer;
+}
+
+:host-context(.dark-theme) .auth-button {
+  background-color: #071d3b;
+  color: #ffa500;
+  border-color: #888;
+}

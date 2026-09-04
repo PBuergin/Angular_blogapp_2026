@@ -14,7 +14,9 @@ import { corsHeaders, handlePreflight } from '../lib/cors.js';
 
 async function authMe(request: HttpRequest): Promise<HttpResponseInit> {
   const preflight = handlePreflight(request);
-  if (preflight) return preflight;
+  if (preflight) {
+    return preflight;
+  }
 
   const cookieHeader = request.headers.get('cookie');
   const sealed = parseCookie(cookieHeader);

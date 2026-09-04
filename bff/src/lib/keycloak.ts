@@ -31,20 +31,20 @@ export async function exchangeAuthorizationCode(
     redirect_uri: redirectUri,
   });
 
-  const res = await fetch(tokenEndpoint(), {
+  const response = await fetch(tokenEndpoint(), {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: body.toString(),
   });
 
-  if (!res.ok) {
-    const error = await res.json().catch(() => ({}));
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
     throw new Error(
       (error as { error_description?: string }).error_description || 'Authentication failed',
     );
   }
 
-  return (await res.json()) as TokenResponse;
+  return (await response.json()) as TokenResponse;
 }
 
 export async function refreshTokens(refreshToken: string): Promise<TokenResponse> {
@@ -55,17 +55,17 @@ export async function refreshTokens(refreshToken: string): Promise<TokenResponse
     refresh_token: refreshToken,
   });
 
-  const res = await fetch(tokenEndpoint(), {
+  const response = await fetch(tokenEndpoint(), {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: body.toString(),
   });
 
-  if (!res.ok) {
+  if (!response.ok) {
     throw new Error('Token refresh failed');
   }
 
-  return (await res.json()) as TokenResponse;
+  return (await response.json()) as TokenResponse;
 }
 
 export async function revokeToken(refreshToken: string): Promise<void> {

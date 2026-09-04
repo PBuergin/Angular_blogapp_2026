@@ -1,3 +1,38 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  padding: 2rem;
+
+  background-color: #ffffff;
+  color: #111111;
+}
+
+button {
+  padding: 0.6rem 1rem;
+  border: 1px solid #777;
+  border-radius: 6px;
+
+  background-color: #ffffff;
+  color: #111111;
+
+  cursor: pointer;
+}
+
 .error {
-  font-weight: bold;
+  color: #b00020;
+}
+
+:host-context(.dark-theme) {
+  background-color: #17100d;
+  color: #ffb07a;
+}
+
+:host-context(.dark-theme) button {
+  background-color: #0d2b4f;
+  color: #ffa500;
+  border-color: #888;
+}
+
+:host-context(.dark-theme) .error {
+  color: #ff8a80;
 }

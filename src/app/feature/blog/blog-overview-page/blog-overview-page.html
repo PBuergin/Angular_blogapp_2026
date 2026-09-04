@@ -11,14 +11,15 @@
   </select>
 
   <!-- Authentifizierung -->
+  <!-- Authentifizierung -->
   @if (authStore.isAuthenticated()) {
     <span>
       {{ authStore.user()?.preferred_username }}
     </span>
 
-    <button type="button" (click)="logout()">Logout</button>
+    <button class="auth-button" type="button" (click)="logout()">Logout</button>
   } @else {
-    <button type="button" (click)="goToLogin()">Login</button>
+    <button class="auth-button" type="button" (click)="goToLogin()">Login</button>
   }
 
   <!-- Dark-/Light-Mode -->
