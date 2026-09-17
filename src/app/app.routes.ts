@@ -15,6 +15,13 @@ export const routes: Routes = [
     loadComponent: () => import('./login-page/login-page').then((m) => m.LoginPageComponent),
   },
 
+  // routing für blog-create
+  {
+    path: 'blog/create',
+    canMatch: [authGuard],
+    loadComponent: () => import('./feature/blog-create/blog-create').then((m) => m.BlogCreate),
+  },
+
   {
     path: 'blog/:id',
     canMatch: [authGuard],

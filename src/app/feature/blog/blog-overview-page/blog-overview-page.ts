@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { BlogCardComponent } from '../blog-card/blog-card';
 
@@ -13,7 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 @Component({
   selector: 'app-blog-overview-page',
   standalone: true,
-  imports: [BlogCardComponent, MatButtonModule, MatIconModule],
+  imports: [BlogCardComponent, MatButtonModule, MatIconModule, RouterLink],
   templateUrl: './blog-overview-page.html',
   styleUrl: './blog-overview-page.scss',
 })

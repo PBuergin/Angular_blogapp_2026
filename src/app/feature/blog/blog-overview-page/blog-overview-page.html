@@ -11,8 +11,12 @@
   </select>
 
   <!-- Authentifizierung -->
-  <!-- Authentifizierung -->
   @if (authStore.isAuthenticated()) {
+    <a mat-button class="create-button" routerLink="/blog/create">
+      <mat-icon>add</mat-icon>
+      Blog erstellen
+    </a>
+
     <span>
       {{ authStore.user()?.preferred_username }}
     </span>
@@ -21,15 +25,6 @@
   } @else {
     <button class="auth-button" type="button" (click)="goToLogin()">Login</button>
   }
-
-  <!-- Dark-/Light-Mode -->
-  <button mat-icon-button type="button" (click)="toggleTheme()">
-    @if (isDarkMode) {
-      <mat-icon>light_mode</mat-icon>
-    } @else {
-      <mat-icon>dark_mode</mat-icon>
-    }
-  </button>
 </div>
 
 <h1>Blog Übersicht</h1>
