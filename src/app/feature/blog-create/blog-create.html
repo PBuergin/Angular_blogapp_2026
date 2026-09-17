@@ -1,0 +1,24 @@
+<h2>Blog-Beitrag erstellen</h2>
+
+<form (submit)="onSubmit($event)">
+  <div>
+    <label for="title">Titel</label>
+    <input id="title" type="text" [formField]="blogForm.title" />
+  </div>
+
+  <div>
+    <label for="content">Inhalt</label>
+    <textarea id="content" [formField]="blogForm.content"></textarea>
+  </div>
+
+  <div>
+    <label for="category">Kategorie</label>
+    <select id="category" [formField]="blogForm.category">
+      <option value="general">Allgemein</option>
+      <option value="technology">Technik</option>
+      <option value="lifestyle">Lifestyle</option>
+    </select>
+  </div>
+
+  <button type="submit">Erstellen</button>
+</form>
