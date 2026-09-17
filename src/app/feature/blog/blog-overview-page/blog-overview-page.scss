@@ -67,3 +67,25 @@ select {
   color: #ffa500;
   border-color: #888;
 }
+
+/* Blog erstellen */
+.create-button {
+  background-color: white;
+  color: black;
+  border: 1px solid #777;
+  border-radius: 6px;
+  padding: 6px 12px;
+  margin-left: 12px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+:host-context(.dark-theme) .create-button {
+  background-color: #071d3b;
+  color: #ffa500;
+  border-color: #888;
+}
+
+.create-button mat-icon {
+  margin-right: 4px;
+}
