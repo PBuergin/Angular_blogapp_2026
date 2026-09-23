@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import {
   form,
   FormField,
@@ -8,6 +8,8 @@ import {
   submit,
   validate,
 } from '@angular/forms/signals';
+import { BlogService } from '../blog/blog.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-blog-create',
@@ -16,6 +18,9 @@ import {
   styleUrl: './blog-create.scss',
 })
 export class BlogCreate {
+  private readonly blogService = inject(BlogService);
+  private readonly router = inject(Router);
+
   blogModel = signal({
     title: '',
     content: '',
@@ -71,7 +76,15 @@ export class BlogCreate {
     event.preventDefault();
 
     submit(this.blogForm, async () => {
-      console.log(this.blogModel());
+      const model = this.blogModel();
+
+      await this.blogService.createBlog({
+        title: model.title,
+        content: model.content,
+        headerImageUrl: '',
+      });
+
+      await this.router.navigate(['/']);
     });
   }
 }

@@ -5,6 +5,7 @@ import { z } from 'zod';
 
 import { Blog } from '../../../models/blog';
 import { environment } from '../../../environments/environment';
+import { NewEntry } from '../../../models/new-entry';
 
 interface BlogResponse {
   data: unknown;
@@ -76,7 +77,7 @@ export class BlogService {
     }
   }
 
-  async createBlog(blog: Blog): Promise<Blog> {
+  async createBlog(blog: NewEntry): Promise<Blog> {
     try {
       return await firstValueFrom(this.http.post<Blog>(this.apiUrl, blog));
     } catch (error) {
