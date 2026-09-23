@@ -23,17 +23,28 @@ h1 {
   color: var(--mat-sys-primary);
 }
 
-/* Blog list */
+/* Blog list - Mobile First */
 .blog-list {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-wrap: wrap;
   gap: $spacing-lg;
 }
 
-/* Responsive Layout */
-@media (min-width: 800px) {
-  .blog-list {
-    grid-template-columns: repeat(2, 1fr);
+.blog-list app-blog-card {
+  flex: 0 0 100%;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .blog-list app-blog-card {
+    flex-basis: calc(50% - #{$spacing-lg / 2});
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .blog-list app-blog-card {
+    flex-basis: calc(33.333% - #{$spacing-lg * 2 / 3});
   }
 }
 
