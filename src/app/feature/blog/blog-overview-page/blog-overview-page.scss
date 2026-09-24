@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 /* Spacing */
 $spacing-sm: 8px;
 $spacing-md: 16px;
@@ -39,14 +41,14 @@ h1 {
 /* Tablet: 768px - 1023px */
 @media (min-width: 768px) and (max-width: 1023px) {
   .blog-list app-blog-card {
-    flex: 0 0 calc(50% - #{$spacing-lg / 2});
+    flex: 0 0 calc(50% - #{math.div($spacing-lg, 2)});
   }
 }
 
 /* Desktop: >= 1024px */
 @media (min-width: 1024px) {
   .blog-list app-blog-card {
-    flex: 0 0 calc(33.333% - #{$spacing-lg * 2 / 3});
+    flex: 0 0 calc(33.333% - #{math.div($spacing-lg * 2, 3)});
   }
 }
 
