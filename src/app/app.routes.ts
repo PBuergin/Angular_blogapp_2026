@@ -24,7 +24,7 @@ export const routes: Routes = [
 
   {
     path: 'blog/:id',
-    canMatch: [authGuard],
+    // hier kein Guard
     loadComponent: () =>
       import('./feature/blog/blog-detail-page/blog-detail-page').then(
         (m) => m.BlogDetailPageComponent,
