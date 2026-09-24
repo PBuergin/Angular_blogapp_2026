@@ -1,0 +1,146 @@
+Meine Findings:
+
+Aufgabe 4:
+
+innerHTML: nichts gefunden
+
+
+bypassSecurity: nichts gefunden
+
+
+localStorage: in blog-overview-page.ts
+
+	const savedTheme = localStorage.getItem('theme');
+	localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
+	
+	Unkritisch, da das theme nichts mit tokens oder credentials zu tun hat.
+
+
+Interpolation-Check:
+
+	src/app/feature/blog/blog-card/blog-card.html:      Das ist Interpolation.   {{ ... }}   bedeuten:
+	src/app/feature/blog/blog-card/blog-card.html:      {{ model().title }}
+	src/app/feature/blog/blog-card/blog-card.html:      {{ model().author }}
+	src/app/feature/blog/blog-card/blog-card.html:      {{ model().likes }}
+	src/app/feature/blog/blog-card/blog-card.ts:  Im Template entsprechend zum Beispiel: {{ model().title }}
+	src/app/feature/blog/blog-detail-page/blog-detail-page.html:    <h1>{{ blog.title }}</h1>
+	src/app/feature/blog/blog-detail-page/blog-detail-page.html:    <p class="author">Von {{ blog.author }}</p>
+	src/app/feature/blog/blog-detail-page/blog-detail-page.html:      {{ blog.contentPreview }}
+	src/app/feature/blog/blog-detail-page/blog-detail-page.html:    <p class="meta">❤️ {{ blog.likes }} Likes · 💬 {{ blog.comments }} Kommentare</p>
+	src/app/feature/blog/blog-overview-page/blog-overview-page.html:        {{ author }}
+	src/app/feature/blog/blog-overview-page/blog-overview-page.html:      {{ authStore.user()?.preferred_username }}
+	src/app/feature/blog/blog-overview-page/blog-overview-page.html:<p>Anzahl Blogs: {{ state.blogCount() }}</p>
+	src/app/feature/blog/blog-overview-page/blog-overview-page.html:    {{ state.error() }}
+	src/app/feature/blog-create/blog-create.html:          <p class="error">{{ error.message }}</p>
+	src/app/feature/blog-create/blog-create.html:          <p class="error">{{ error.message }}</p>
+	src/app/feature/blog-create/blog-create.html:          <p class="error">{{ error.message }}</p>
+	src/app/login-page/login-page.html:  <p>{{ errorMessage() }}</p>
+
+	Mehrere Angular-Interpolationen ({{ ... }}) gefunden, unter anderem für Blogtitel, Autor, Inhalt, Benutzername und Fehlermeldungen. 
+	Es handelt sich um normale Angular-Interpolation. 
+	Die Werte werden automatisch escaped und nicht als HTML interpretiert. Keine auffällige Verwendung festgestellt.
+
+
+URL-Check: (mit KI Unterstützung)
+
+	PS C:\Users\HFTM\Documents\Web-Applikation\__Blog_App\Angular_blogapp_2026> grep -r "returnUrl" src/
+
+	src/app/core/auth.guard.ts:  const returnUrl = '/' + segments.map((segment) => segment.path).join('/');
+	src/app/core/auth.guard.ts:        returnUrl,
+	src/app/feature/blog/blog-overview-page/blog-overview-page.ts:        returnUrl: '/',
+	src/app/login-page/login-page.ts:  readonly returnUrl = input<string>('/');
+	src/app/login-page/login-page.ts:    const url = this.returnUrl() || '/';
+	src/app/login-page/login-page.ts:    window.location.href = `${environment.api}/auth/login?returnUrl=${encodeURIComponent(url)}`;
+
+
+	returnUrl wird mit encodeURIComponent() codiert. 
+	Dies verhindert jedoch keinen Open Redirect. 
+	Es muss geprüft werden, woher returnUrl stammt 
+	und ob vor dem eigentlichen Redirect nur interne URLs zugelassen werden.
+
+	in auth.guard.ts:
+	const returnUrl = '/' + segments.map((segment) => segment.path).join('/');
+	erzeugt: const returnUrl = '/blog/create';
+
+	Frontend: returnUrl wird im Auth-Guard aus internen Angular-Routensegmenten erzeugt. 
+	Kein externer Redirect erkennbar. 
+	BFF-Verarbeitung der returnUrl noch prüfen.
+
+	in auth-login.ts:
+	
+	function safeReturnUrl(value: string | null): string {
+  		if (!value || !value.startsWith('/') || value.startsWith('//')) {
+    			return '/';
+  		}
+
+  		return value;
+	}
+
+	und
+
+	const returnUrl = safeReturnUrl(request.query.get('returnUrl'));
+	
+	wird verhindert, dass die url mit // (webseite) beginnt.
+
+
+	Die returnUrl wird im BFF validiert. 
+	safeReturnUrl() akzeptiert nur URLs, die mit / beginnen, und lehnt // explizit ab. 
+	Ungültige bzw. externe URLs werden durch / ersetzt. 
+	Dadurch wird an dieser Stelle ein Open Redirect verhindert.
+
+	in auth-callback.ts
+	
+	return {
+      		status: 302,
+      		headers: {
+        		...corsHeaders,
+        		Location: oauthState.returnUrl || '/',
+      		},
+      		cookies: [sessionCookie(sealedSession), clearOAuthStateCookie()],
+    	};
+
+
+	URL-/Redirect-Check: Die returnUrl wird im BFF durch safeReturnUrl() validiert. 
+	Nur interne Pfade, die mit / beginnen, werden akzeptiert; 
+	externe URLs und // werden verworfen und durch / ersetzt. 
+	Nach erfolgreichem Login verwendet der Callback die zuvor gespeicherte returnUrl für einen HTTP-302-Redirect. 
+	Es ist kein Open Redirect erkennbar.
+
+
+Aufgabe 5:
+
+	Admin-Routen: Im aktuellen Routing sind keine Admin-Routen vorhanden. 
+	Daher gibt es hier keine Route, deren Guard geprüft werden kann.
+
+	'**' (not-found.page) braucht kein Guard.
+
+	'blog/:id' ist eine öffentliche Route und braucht den gesetzen Guard nicht,
+	weil sonst ein öffentlicher Benutzer eine blog-detail-page nicht sehen könnte,
+	also Guard entfernen.
+
+
+
+
+	
+
+	
+
+
+
+
+	
+
+
+	
+
+
+	
+	
+
+
+
+
+
+
+
+
