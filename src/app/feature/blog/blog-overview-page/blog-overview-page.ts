@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
 import { BlogCardComponent } from '../blog-card/blog-card';
@@ -17,8 +17,15 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './blog-overview-page.html',
   styleUrl: './blog-overview-page.scss',
 })
-export class BlogOverviewPageComponent implements OnInit {
+export class BlogOverviewPageComponent implements OnInit, OnDestroy {
   isDarkMode = false;
+  readonly isMobile = signal(false);
+
+  private readonly mobileQuery = window.matchMedia('(max-width: 767px)');
+
+  private readonly mobileQueryListener = (event: MediaQueryListEvent): void => {
+    this.isMobile.set(event.matches);
+  };
 
   // Zentraler Blog-State
   readonly state = inject(BlogStateService);
@@ -30,7 +37,14 @@ export class BlogOverviewPageComponent implements OnInit {
   private readonly router = inject(Router);
 
   async ngOnInit(): Promise<void> {
+    this.isMobile.set(this.mobileQuery.matches);
+    this.mobileQuery.addEventListener('change', this.mobileQueryListener);
+
     await this.state.loadBlogs();
+  }
+
+  ngOnDestroy(): void {
+    this.mobileQuery.removeEventListener('change', this.mobileQueryListener);
   }
 
   constructor() {

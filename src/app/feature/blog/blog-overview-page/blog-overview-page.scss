@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 /* Spacing */
 $spacing-sm: 8px;
 $spacing-md: 16px;
@@ -14,8 +16,10 @@ $spacing-xl: 32px;
 
 .toolbar {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: $spacing-md;
+  flex-direction: column;
+  align-items: stretch;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
 }
 
 h1 {
@@ -23,17 +27,28 @@ h1 {
   color: var(--mat-sys-primary);
 }
 
-/* Blog list */
+/* Mobile: < 768px */
 .blog-list {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-wrap: wrap;
   gap: $spacing-lg;
 }
 
-/* Responsive Layout */
-@media (min-width: 800px) {
-  .blog-list {
-    grid-template-columns: repeat(2, 1fr);
+.blog-list app-blog-card {
+  flex: 0 0 100%;
+}
+
+/* Tablet: 768px - 1023px */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .blog-list app-blog-card {
+    flex: 0 0 calc(50% - #{math.div($spacing-lg, 2)});
+  }
+}
+
+/* Desktop: >= 1024px */
+@media (min-width: 1024px) {
+  .blog-list app-blog-card {
+    flex: 0 0 calc(33.333% - #{math.div($spacing-lg * 2, 3)});
   }
 }
 
@@ -58,7 +73,6 @@ select {
   border: 1px solid #777;
   border-radius: 6px;
   padding: 6px 12px;
-  margin-left: 12px;
   cursor: pointer;
 }
 
@@ -75,9 +89,20 @@ select {
   border: 1px solid #777;
   border-radius: 6px;
   padding: 6px 12px;
-  margin-left: 12px;
   cursor: pointer;
   text-decoration: none;
+}
+
+@media (min-width: 768px) {
+  .toolbar {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .auth-button,
+  .create-button {
+    margin-left: 12px;
+  }
 }
 
 :host-context(.dark-theme) .create-button {

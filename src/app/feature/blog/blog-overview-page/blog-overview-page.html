@@ -27,6 +27,10 @@
   }
 </div>
 
+@if (isMobile()) {
+  <p>Mobile Ansicht</p>
+}
+
 <h1>Blog Übersicht</h1>
 
 <p>Anzahl Blogs: {{ state.blogCount() }}</p>
