@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { AsyncPipe } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,7 +25,7 @@ import { map, shareReplay } from 'rxjs/operators';
 export class SidebarComponent {
   private breakpointObserver = inject(BreakpointObserver);
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe('(max-width: 767px)').pipe(
     map((result) => result.matches),
     shareReplay(),
   );
