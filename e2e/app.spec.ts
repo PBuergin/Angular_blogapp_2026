@@ -1,6 +1,8 @@
 import { expect, test } from '@playwright/test';
+import { mockBlogApi } from './fixtures/mock-blogs';
 
 test('Blog-Liste erfüllt die Akzeptanzkriterien', async ({ page }) => {
+  await mockBlogApi(page);
   // Blog-Übersicht öffnen
   await page.goto('/');
 

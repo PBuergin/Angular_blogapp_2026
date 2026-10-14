@@ -7,8 +7,10 @@ Akzeptanzkriterien – Blog-Liste
 */
 
 import { test, expect } from '@playwright/test';
+import { mockBlogApi } from './fixtures/mock-blogs';
 
 test('Blog-Liste erfüllt die Akzeptanzkriterien', async ({ page }) => {
+  await mockBlogApi(page);
   await page.goto('http://localhost:4200/');
 
   // Kriterium 1: Blog-Einträge werden angezeigt

@@ -8,8 +8,10 @@ Akzeptanzkriterien - Blog-detail-page
 */
 
 import { test, expect } from '@playwright/test';
+import { mockBlogApi } from './fixtures/mock-blogs';
 
 test('Blog-Detailseite zeigt den ausgewählten Blog', async ({ page }) => {
+  await mockBlogApi(page);
   await page.goto('/');
 
   const firstCard = page.locator('app-blog-card').first();
